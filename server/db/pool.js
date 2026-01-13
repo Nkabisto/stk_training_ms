@@ -1,5 +1,7 @@
 import pkg from  "pg";
 import 'dotenv/config';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const { Pool } = pkg;
 

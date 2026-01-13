@@ -33,10 +33,8 @@ router.post('/api/applicants',async(req, res)=>{
       data: result.rows[0],
     });
   }catch(err){
-    console.error('Error inserting new applicant into database: ',err);
-    res.status(500).json({
-      error: 'Submission failed! Contact the office for assistance'
-    });
+    console.error("SERVER ERROR:",err);
+    res.status(500).json({error: err.message});
   }
 });
 
