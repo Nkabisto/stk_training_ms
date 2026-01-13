@@ -4,7 +4,7 @@ import { pool } from '../db/pool.js';
 const router = express.Router();
 
 //GET /api/slots
-router.get('/', async(req, res)=>{
+router.get('/slots', async(req, res)=>{
   try{
     const queryText = `
     SELECT * FROM appointment_slots
@@ -17,6 +17,32 @@ router.get('/', async(req, res)=>{
   } catch(error){
     console.error('Error fetching slots:', error);
     res.status(500).json({ error: 'Internal server error'});
+  }
+})
+
+router.post('/slots', async(req, res)=>{
+  const {
+    startTime,
+    endTime,
+    maxStd
+  }= req.body;
+
+  if(!startTime || !endTime){
+    return res.status(400)
+      .json({
+        error:"Missing start start time or end time"
+      });
+  }
+
+  try{
+    await pool.query(`
+      INSERT INTO appointment_slots(start_time, end_time, maxStd) 
+      VALUES($1,$2,$3)`,
+      [startTime, endTime, maxStd]
+    )
+  } catch(err){
+    console.error({'Error creating appointments:',err});
+    res.status(500).json(error: 'Internal server error')
   }
 })
 

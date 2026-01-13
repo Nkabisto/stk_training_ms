@@ -4,17 +4,15 @@ import { pool } from '../db/pool.js';
 const router = express.Router();
 
 // POST /api/bookings
-router.post('/bookings', (req, res)=>{
-  const {
-    applicantID,
-    slotID
-  } = req.body;
-
-
-  res.status(201).json({
-    message: "New booking created successfully",
-    data: newBookig
-  })
+router.post('/bookings', async (req, res)=>{
+  const { applicantID, slotID } = req.body;
+  
+  if (!applicantID || !slotID){
+    return res.status(400)
+      .json({
+        error:"Missing applicant id or slot id" 
+      });
+  }
 
   try{
     await pool.query('BEGIN');
@@ -27,15 +25,22 @@ router.post('/bookings', (req, res)=>{
     await pool.query(`
       UPDATE appointment_slots 
       SET current_bookings = current_bookings+1,
-      WHERE id = $2;
-      [applicantID, slotID]
-      COMMIT
+      WHERE id = $1`,
+      [slotID]
     );
-    await client.query('COMMIT');
+
+    await pool.query('COMMIT');
+
+    res.status(409).json({
+      message: err.message,
+    });
+
   } catch(err){
-    await client.query('ROLLBACK');
-    throw err;
+    await pool.query('ROLLBACK');
+
   } finally{
     pool.release(); 
   }
+
+});
 

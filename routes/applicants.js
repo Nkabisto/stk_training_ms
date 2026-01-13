@@ -12,7 +12,7 @@ router.post('/applicants', (req, res)=>{
     phone
   } = req.body;
 
-  // Logic to save applicants to the dtabase 
+  // Logic to save applicants to the database 
   const newApplicant = {
     id: Date.now(), 
     firstName,
