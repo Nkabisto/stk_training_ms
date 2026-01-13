@@ -1,9 +1,16 @@
 import React from 'react'; 
 import { useState } from 'react'
-import './App.css'
+//import './App.css'
+import ApplicationForm from "./pages/ApplicationForm";
 
 export default function App() {
-  return <h1>Hello Stocktake Training App</h1>;
+  return (
+    <div className="App">
+      <h1>Dial A Stocktaker Application Form</h1>
+      <hr />
+    <ApplicationForm />
+    </div>
+  );
 }
 
 

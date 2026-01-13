@@ -1,5 +1,5 @@
 import React, {useState } from "react";
-import ApplicantForm from "../ApplicantForm";
+import ApplicantForm from "../components/ApplicantForm";
 
 export default function ApplicationForm(){
   const [formData, setFormData] = useState({
