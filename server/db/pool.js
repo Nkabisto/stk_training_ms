@@ -1,4 +1,3 @@
-import process from 'node:process';
 import pkg from  "pg";
 import 'dotenv/config';
 

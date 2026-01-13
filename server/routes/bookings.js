@@ -4,7 +4,7 @@ import { pool } from '../db/pool.js';
 const router = express.Router();
 
 // POST /api/bookings
-router.post('/api/bookings', async (req, res)=>{
+router.post('/', async (req, res)=>{
   const { applicantID, slotID } = req.body;
   
   if (!applicantID || !slotID){
@@ -14,33 +14,43 @@ router.post('/api/bookings', async (req, res)=>{
       });
   }
 
+  const client = await pool.connect();
+
   try{
-    await pool.query('BEGIN');
-    await pool.query(`
+    await client.query('BEGIN');
+    await client.query(`
       INSERT INTO booking_slots (applicant_id, slot_id) 
       VALUES($1,$2)`, 
       [applicantID,slotID]
     );
 
-    await pool.query(`
+    await client.query(`
       UPDATE appointment_slots 
       SET current_bookings = current_bookings+1,
       WHERE id = $1`,
       [slotID]
     );
 
-    await pool.query('COMMIT');
+    await client.query('COMMIT');
 
-    res.status(409).json({
-      message: err.message,
+    res.status(201).json({
+      message: "Booking successful",
     });
 
   } catch(err){
-    await pool.query('ROLLBACK');
+    await client.query('ROLLBACK');
+    console.error('Transaction error:',err)
+
+    res.status(500).json ({
+      error:"Internal server error",
+      details: err.message
+    });
 
   } finally{
-    pool.release(); 
+    client.release(); 
   }
 
 });
+
+export default router;
 

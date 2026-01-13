@@ -41,8 +41,8 @@ router.post('/slots', async(req, res)=>{
       [startTime, endTime, maxStd]
     )
   } catch(err){
-    console.error({'Error creating appointments:',err});
-    res.status(500).json(error: 'Internal server error')
+    console.error('Error creating appointments:',err);
+    res.status(500).json({error: 'Internal server error'})
   }
 })
 
