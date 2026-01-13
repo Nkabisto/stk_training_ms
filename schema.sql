@@ -3,7 +3,7 @@ CREATE TABLE applicants(
 	first_name VARCHAR(100) NOT NULL,
 	last_name VARCHAR(100) NOT NULL,
 	sa_id CHAR(13) NOT NULL UNIQUE,
-	email TEXT NOT NULL,
+	email VARCHAR(100) NOT NULL,
 	phone VARCHAR(10),
 	created_at TIMESTAMP DEFAULT NOW()
 );

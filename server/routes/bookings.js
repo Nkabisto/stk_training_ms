@@ -4,7 +4,7 @@ import { pool } from '../db/pool.js';
 const router = express.Router();
 
 // POST /api/bookings
-router.post('/bookings', async (req, res)=>{
+router.post('/api/bookings', async (req, res)=>{
   const { applicantID, slotID } = req.body;
   
   if (!applicantID || !slotID){

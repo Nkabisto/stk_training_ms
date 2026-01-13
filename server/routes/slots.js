@@ -4,7 +4,7 @@ import { pool } from '../db/pool.js';
 const router = express.Router();
 
 //GET /api/slots
-router.get('/slots', async(req, res)=>{
+router.get('/api/slots', async(req, res)=>{
   try{
     const queryText = `
     SELECT * FROM appointment_slots

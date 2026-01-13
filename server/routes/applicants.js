@@ -1,9 +1,10 @@
 import express from 'express';
+import { pool } from '../db/pool.js'; 
 
 const router = express.Router();
 
 // POST /api/applicants
-router.post('/applicants', (req, res)=>{
+router.post('/api/applicants',async(req, res)=>{
   const {
     firstName,
     lastName,
@@ -12,20 +13,31 @@ router.post('/applicants', (req, res)=>{
     phone
   } = req.body;
 
-  // Logic to save applicants to the database 
-  const newApplicant = {
-    id: Date.now(), 
-    firstName,
-    lastName,
-    saID,
-    email,
-    phone,
-    createdAt: new Date().toISOString()
-  };
+  try{
+    const queryText = `
+      INSERT INTO applicants(first_name,last_name,sa_id,email,phone,created_at)
+      VALUES($1,$2,$3,$4,$5,$6)
+      RETURNING *;
+    `;
+    const values = [firstName, lastName, saID,email,phone,new Date().toISOString()];
 
-  // 201 status is standard for resource creation
-  res.status(201).json({
-    message: "Applicant created successfully",
-    data: newApplicant
-  });
+  if (!firstName || !lastName || !saID || !email || !phone) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+    const result = await pool.query(queryText, values);
+
+    // 201 status is standard for resource creation
+    res.status(201).json({
+      message: "Submission was successful.",
+      data: result.rows[0],
+    });
+  }catch(err){
+    console.error('Error inserting new applicant into database: ',err);
+    res.status(500).json({
+      error: 'Submission failed! Contact the office for assistance'
+    });
+  }
 });
+
+export default router;

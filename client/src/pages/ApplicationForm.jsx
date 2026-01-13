@@ -19,13 +19,13 @@ export default function ApplicationForm(){
     setFormData((prev) => ({ ...prev, [name]:value}));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     try{
-      const res = await fetch("/api/slots", {
+      const res = await fetch("/api/applicants", {
         method: "POST",
         headers: {
-          "Content-Type": "applicatio/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
@@ -42,24 +42,26 @@ export default function ApplicationForm(){
   };
 
   return (
-    <ApplicantForm
-      formData={formData}
-      handleChange={handleChange}
-      handleSubmit={handleSubmit}
-    />
-  <div>
-    {response && (
-      <div style={{ marginTop: "1rem", color: "green" }}>
-        <strong>{response.message}</strong>
-        <pre>{JSON.stringify(response.data, null, 2)}</pre>
-      </div>
-    )}
+    <>
+      <ApplicantForm
+        formData={formData}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+      />
+    <div>
+      {response && (
+        <div style={{ marginTop: "1rem", color: "green" }}>
+          <strong>{response.message}</strong>
+          <pre>{JSON.stringify(response.data, null, 2)}</pre>
+        </div>
+      )}
 
-    {error && (
-      <div style={{ marginTop: "1rem", color: "red" }}>
-        <strong>Error:</strong> {error}
-      </div>
-    )}
-  </div>
+      {error && (
+        <div style={{ marginTop: "1rem", color: "red" }}>
+          <strong>Error:</strong> {error}
+        </div>
+      )}
+    </div>
+  </>
 );
 }
