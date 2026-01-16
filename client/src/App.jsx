@@ -1,16 +1,16 @@
 import React from 'react'; 
-import { useState } from 'react'
+//import { useState } from 'react'
 //import './App.css'
-import ApplicationForm from "./pages/ApplicationForm";
+//import ApplicationForm from "./pages/ApplicationForm";
+import Schedule from "./pages/Schedule";
 
 export default function App() {
   return (
     <div className="App">
-      <h1>Dial A Stocktaker Application Form</h1>
-      <hr />
-    <ApplicationForm />
+    <Schedule />
     </div>
   );
 }
+
 
 
